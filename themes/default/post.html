@@ -1,0 +1,79 @@
+{% extends 'default/base.html' %} {% load thumbnail %} {% load static %}
+{% block title %}{{p.title}}{% endblock title %}
+{% block bread-crumb %}
+<a href="/"><i class="bsh-home"></i> </a> » <a href="/category/{{p.category.id}}">{{p.category}}</a> » <a href="/post/{{p.id}}">{{p.title}}</a>
+
+{% endblock %}
+{% block content %}
+                <div class="left-side left">
+                    <div class="post">
+                        <div class="post-pik">
+                          {% thumbnail p.image "802x339" crop="center" as im %}<img src="{{ im.url }}" >{% endthumbnail %}
+                        </div>
+                        <h1>{{p.title}}</h1>
+                        {{ p.content | safe}}
+                        {% if p.form %}
+                      <div class="comment-box">
+                          <h3><span>{{p.form.title}}</span></h3>
+                          <form class="press-comment" method="post" action="/getanswer/{{p.form.id}}/">{% csrf_token %}
+                            {% for g in p.form.field_set.all %}
+                              <input type="{{g.type}}"  name="{{g.id}}" placeholder="{{g.title}}">
+                            {% endfor %}
+                              {% for g in p.form.textfield_set.all %}
+                              <textarea  name="{{g.id}}" placeholder="{{g.title}}"></textarea>
+                              {% endfor %}
+                              <button type="submit" onclick="sMessage()">ارسال</button>
+                          </form>
+                      </div>
+                    {% endif %}
+                    </div>
+                    {% if p.com %}
+                    <div class="comment-box">
+                        <h3>دیدگاه ها</h3>
+
+                            <input type="text" id="name" placeholder="نام و نام خانوادگی">
+                            <input type="email" id="email" placeholder="رایانامه">
+                            <textarea id="text" placeholder="متن پیام"></textarea>
+                            <button id="send" type="submit">ثبت و ارسال دیدگاه</button>
+
+                    </div>
+                    <div class="comment-box">
+                        <h3><span>تعداد دیدگاه ها تا کنون ({{com.count}})</span></h3>
+                        <ul class="press-user-comments" id='ref'>
+                        {% for x in com %}
+                        <li>
+                          <div class="user-comment-details over">{% if port == 1 %}<a href="/dc/{{x.id}}/" class="pull-left btn btn-danger btn-xs"><i class="fa fa-trash"></i> حذف</a>{% endif %}
+                            <div class="user-comment-name right">{{x.name}}: </div>
+                            <div class="user-comment-date left"><i class="bsh-calendar"></i> {{x.date}}</div>
+                          </div>
+                          <div class="user-comment-matn">{{x.text}}</div>
+                      </li>
+
+                        {% endfor %}
+                        <ul>
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% endblock %}
+                {% block js %}
+                <script type="text/javascript">
+                $(function () {
+                    $("#send").click(function () {
+                        $.ajax({
+                           url: '/getcom/{{p.id}}/',
+                           data: { 'name': $("#name").val() , 'email': $("#email").val() , 'text': $("#text").val() },
+                           type: 'post',
+                           cache: false,
+                           success: function updateDiv()
+                {
+                   $( "#ref" ).load(window.location.href + " #ref" );
+                   document.getElementById('name').value = "";
+                   document.getElementById('text').value = "";
+                   document.getElementById('email').value = "";
+                }
+                        });
+                    });
+                });
+                </script>
+                {% endblock %}

@@ -1,0 +1,124 @@
+{% extends 'news/base.html' %} {% load thumbnail %} {% load static %}
+{% block title %}{{p.title}}{% endblock title %}
+{% block content %}
+<style media="screen">
+  .pagination {
+    margin-top: 10px;
+    text-align: center;
+  }
+  .pagination a {
+    background-color: #d70015;
+    color: #f5f5f5;
+    text-align: center;
+    padding: 3px 5px;
+    border-radius: 3px;
+    transition: all 0.3s;
+  }
+  .pagination a:hover {
+    color: #fff;
+    background-color: #a50413;
+  }
+
+</style>
+    <main>
+	<div class="cat-cover relative">
+    {% thumbnail p.image "1200x190" crop="center" as im %}
+        <img src="{{ im.url }}"  >
+        {% endthumbnail %}
+		<div class="cat-cover-filter">
+			<h1>{{p.title}}</h1>
+		</div>
+	</div>
+	<div class="news-bread-crumb"><i class="bsh-home"></i> {{setting.persian_title}} » {{p.title}}</div>
+        <div class="wrap padding-10 over">
+            <div class="latest-news right over">
+                <h3><span>آخرین مطالب {{p.title}}</span></h3>
+                <ul>
+                  {% for post in hotnewss %}
+                    <li>
+                        <a href="/post/{{ post.id }}">
+                            <div class="latest-thumb right">  {% thumbnail post.image "220x143" crop="center" as im %}
+                                <img src="{{ im.url }}"  >
+                                {% endthumbnail %}</div>
+                            <div class="latest-item-content right">
+                                <h3>{{ post.title }}</h3>
+                                <p>{{post.demo}}</p>
+                                <div class="latest-date"><i class="bsh-calendar"></i>{{post.created_date}}</div>
+                            </div>
+                        </a>
+                    </li>
+                    {% endfor %}
+
+                </ul>
+
+
+
+
+
+                <div class="pagination">
+    <span class="step-links">
+        {% if hotnewss.has_previous %}
+            <a href="?page=1">« صفحه نخست</a>
+            <a href="?page={{ hotnewss.previous_page_number }}">قبلی</a>
+        {% endif %}
+
+        <span class="current">
+            صفحه {{ hotnewss.number }} از {{ hotnewss.paginator.num_pages }}
+        </span>
+
+        {% if hotnewss.has_next %}
+            <a href="?page={{ hotnewss.next_page_number }}">بعدی</a>
+            <a href="?page={{ hotnewss.paginator.num_pages }}">آخر &raquo;</a>
+        {% endif %}
+    </span>
+              </div>
+
+
+
+
+            </div>
+            <div class="tasviri left">
+                <h3><span>هفت خبر برتر این دسته</span></h3>
+				<div class="seven-top">
+					<ul>
+            {% for post in popular|slice:":7"  %}
+
+						<li>
+							<a href="/post/{{ post.id }}">
+                {% thumbnail post.image "220x143" crop="center" as im %}
+                    <img src="{{ im.url }}"  >
+                    {% endthumbnail %}
+								<h3>{{post.title}}</h3>
+								<p>{{post.demo}}</p>
+							</a>
+						</li>
+                                    {% endfor %}
+
+
+					</ul>
+				</div>
+        {% if ads %}
+
+                        <h3 class="margin-15"><span>تبلیغات متنی</span></h3>
+                        <div class="cat-ads">
+                          {% for a in ads %}
+  					<a href="{{a.url}}"><span>{{a.title}}</span></a>
+                          {% endfor %}
+
+
+
+                        </div>
+        {% endif %}
+
+                <h3 class="margin-15"><span>عضویت در خبرنامه {{setting.persian_title}}</span></h3>
+                <div class="news-letter">
+					<p>با عضویت در خبرنامه اخبار {{setting.persian_title}} با ما همراه باشید</p>
+					<form name="khabarname" method="post" action="/getmail/">{% csrf_token %}
+						<input type="email" name='email' placeholder="آدرس رایانامه شما">
+						<button type="submit">عضویت در خبرنامه</button>
+					</form>
+                </div>
+            </div>
+        </div>
+        </main>
+{% endblock %}

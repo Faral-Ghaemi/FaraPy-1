@@ -1,0 +1,230 @@
+{% extends 'news/base.html' %} {% load thumbnail %} {% load static %}
+{% block title %}{{p.title}}{% endblock title %}
+{% block content %}
+	<div class="cat-cover relative">{% thumbnail p.image "1200x190" crop="center" as im %}
+      <img src="{{ im.url }}"  >
+      {% endthumbnail %}
+		<div class="cat-cover-filter">
+			<h1>{{p.title}}</h1>
+			<h3>{{p.demo}}</h3>
+		</div>
+	</div>
+	<div class="news-bread-crumb"><i class="bsh-home"></i> {{setting.persian_title}} » {{p.category}} » {{p.title}}</div>
+        <div class="wrap padding-10 relative">
+            <div class="press-setting right" data-sticky data-margin-top="80">
+                <a id="linkIncrease"><i class="bsh-plus"></i> </a>
+                <a id="linkDecrease"><i class="bsh-menha"></i> </a>
+                <a id="linkReset"><i class="bsh-reset"></i> </a>
+                <a onclick="printDiv('printableArea')"><i class="bsh-print"></i> </a>
+                <a><i class="bsh-bazdid"></i> <span class="bazdid">{{p.view}}</span> </a>
+            </div>
+			<div class="press right over" id="printableArea">
+                <div class="press-thumb relative">
+                    <section id="press-slider">
+                        <div class="owl-carousel">
+                          {% thumbnail p.image "745x375" crop="center" as im %}
+                              <img src="{{ im.url }}" >
+                              {% endthumbnail %}
+
+                        </div>
+                    </section>
+                </div>
+                <div class="press-titr">{{p.title}}</div>
+                <div class="press-sub-titr">
+                    <p>
+                    {{p.demo}}
+                    </p>
+                </div>
+                <div id="divContent" class="press-content">
+                    <p>{{ p.content | safe}}</p>
+                    	{% if p.form %}
+                    <div class="latest-news related-news relative">
+                        <h3><span>{{p.form.title}}</span></h3>
+                        <form class="press-comment" method="post" action="/getanswer/{{p.form.id}}/">{% csrf_token %}
+                          {% for g in p.form.field_set.all %}
+                            <input type="{{g.type}}"  name="{{g.id}}" placeholder="{{g.title}}">
+                          {% endfor %}
+                            {% for g in p.form.textfield_set.all %}
+                            <textarea  name="{{g.id}}" placeholder="{{g.title}}"></textarea>
+                            {% endfor %}
+                            <button type="submit" onclick="sMessage()">ارسال</button>
+                            <div class="comment-message" id="message-show">
+                                <p>نظر شما با موفقیت ثبت شد و پس از تایید مدیریت نمایش داده خواهد شد.</p>
+                            </div>
+                            <script>
+                                function sMessage() {
+                                    var x = document.getElementById("message-show");
+                                    if (x.style.display === "inline-block") {
+                                        x.style.display = "none";
+                                    } else {
+                                        x.style.display = "inline-block";
+                                    }
+                                }
+                            </script>
+                        </form>
+                    </div>
+                  {% endif %}
+                    <span>{{p.created_date}}</span>
+                    <div class="press-end">نوشته شده توسط {{p.author}}</div>
+                    <div class="tag-box">
+                        <ul>
+                            <ul>
+                              {% for x in p.bar %}
+                                <li><a href="#">{{x}}</a></li>
+                              {% endfor %}
+                            </ul>
+                        </ul>
+                    </div>
+                    <div class="latest-news related-news relative">
+                        <h3><span>مطالب مرتبط</span></h3>
+                        <section id="press-related">
+                            <div class="owl-carousel">
+                              {% for x in p.category.post_set.all|slice:":7" %}
+                                <a href="/post/{{x.id}}/">
+                                  {% thumbnail x.image "185x93" crop="center" as im %}
+                                      <img src="{{ im.url }}" >
+                                      {% endthumbnail %}
+                                    <h4>{{x.title}}</h4>
+                                </a>
+                                {% endfor %}
+
+                            </div>
+                        </section>
+                    </div>
+                    {% if p.com %}
+                    <div class="latest-news related-news relative">
+                        <h3><span>دیدگاه ها</span></h3>
+                        <div class="press-comment">
+                            <input type="text" id="name" placeholder="نام">
+                            <input type="email" id="email" placeholder="آدرس رایانامه">
+                            <textarea id="text" placeholder="متن دیدگاه"></textarea>
+                            <button id="send" type="submit" onclick="sMessage()">ثبت دیدگاه</button>
+                            <div class="comment-message"  id="message-show">
+                                <p>نظر شما با موفقیت ثبت شد و پس از تایید مدیریت نمایش داده خواهد شد.</p>
+                            </div>
+                            <script>
+                                function sMessage() {
+                                    var x = document.getElementById("message-show");
+                                    if (x.style.display === "inline-block") {
+                                        x.style.display = "none";
+                                    } else {
+                                        x.style.display = "inline-block";
+                                    }
+                                }
+                            </script>
+                        </div>
+                    </div>
+                    <div class="latest-news related-news relative">
+                        <h3><span>تعداد دیدگاه ها تا کنون ({{com.count}})</span></h3>
+                        <ul class="press-user-comments" id='ref'>
+                        {% for x in com %}
+                        <li>
+                          <div class="user-comment-details over">{% if port == 1 %}<a href="/dc/{{x.id}}/" class="pull-left btn btn-danger btn-xs"><i class="fa fa-trash"></i> حذف</a>{% endif %}
+                            <div class="user-comment-name right">{{x.name}}</div>
+                            <div class="user-comment-date left">{{x.date}}</div>
+                          </div>
+                          <div class="user-comment-matn">{{x.text}}</div>
+                      </li>
+
+                        {% endfor %}
+                        <ul>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="press-share right" data-sticky data-margin-top="80">
+                <a href=""><i class="bsh-whatsapp"></i> </a>
+                <a href=""><i class="bsh-telegram"></i> </a>
+                <a href=""><i class="bsh-aparat"></i> </a>
+                <a href=""><i class="bsh-twitter"></i> </a>
+            </div>
+            <div class="news-sidebar left">
+                <div class="boshra-video-tabs">
+                    <div class="tab">
+                        <button class="tablinks" onclick="openVideo(event, 'hafte')" id="defaultOpen"> پربازدید ترین</button>
+                        <button class="tablinks" onclick="openVideo(event, 'mah')">داغترین</button>
+                        <button class="tablinks" onclick="openVideo(event, 'sal')">جدیدترین</button>
+                    </div>
+
+                    <div id="hafte" class="tabcontent">
+                        <ul>
+                          {% for p in pop %}
+                            <li>
+                                <a href="/post/{{p.id}}">
+                                    <div class="side-tab-thumb">{% thumbnail p.image "117x76" crop="center" as im %}
+                                        <img src="{{ im.url }}" >
+                                        {% endthumbnail %}</div>
+                                    <h3>{{p.title}}</h3>
+                                </a>
+                            </li>
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+
+                    <div id="mah" class="tabcontent">
+                        <ul>
+                          {% for p in sar %}
+                            <li>
+                                <a href="/post/{{p.id}}">
+                                    <div class="side-tab-thumb">{% thumbnail p.image "117x76" crop="center" as im %}
+                                        <img src="{{ im.url }}" >
+                                        {% endthumbnail %}</div>
+                                    <h3>{{p.title}}</h3>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div id="sal" class="tabcontent">
+                        <ul>
+                          {% for p in new %}
+                            <li>
+                                <a href="/post/{{p.id}}">
+                                    <div class="side-tab-thumb">{% thumbnail p.image "117x76" crop="center" as im %}
+                                        <img src="{{ im.url }}" >
+                                        {% endthumbnail %}</div>
+                                    <h3>{{p.title}}</h3>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <script>
+                        document.getElementById("defaultOpen").click();
+                    </script>
+                    <!-- <div class="press-banner">
+                        <a href="#" title="banner"><img src="{% static 'news/img/mosabeghe.jpg' %}"></a>
+                        <a href="#" title="banner"><img src="{% static 'news/img/mosabeghe.jpg' %}"></a>
+                    </div> -->
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <script type="text/javascript">
+        $(function () {
+            $("#send").click(function () {
+                $.ajax({
+                   url: '/getcom/{{p.id}}/',
+                   data: { 'name': $("#name").val() , 'email': $("#email").val() , 'text': $("#text").val() },
+                   type: 'post',
+                   cache: false,
+                   success: function updateDiv()
+        {
+           $( "#ref" ).load(window.location.href + " #ref" );
+           document.getElementById('name').value = "";
+           document.getElementById('text').value = "";
+           document.getElementById('email').value = "";
+        }
+                });
+            });
+        });
+        </script>
+        <script>
+            var sticky = new Sticky('[data-sticky]', {});
+        </script>
+{% endblock %}
+{% block js %}
+
+{% endblock %}

@@ -1,0 +1,178 @@
+* {
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    list-style: none;
+}
+body {
+    font-family: Tahoma;
+    font-size: 14px;
+}
+.relative {
+    position: relative;
+}
+.over {
+    overflow: hidden;
+}
+.clear {
+    clear: both;
+}
+.wrap, nav, .copy-right {
+    max-width: 1170px;
+    margin: 0 auto;
+}
+header {
+    min-height: 480px;
+    background: rgb(40,171,137);
+    background: linear-gradient(317deg, rgba(40,171,137,1) 0%, rgba(16,154,102,1) 27%, rgba(0,97,60,1) 69%);
+    border-bottom: 0.25rem solid #05744a;
+}
+nav ul {
+    padding: 10px 0;
+}
+nav ul li {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 10px;
+}
+nav ul li a {
+    color: #f1f1f1;
+    font-size: 13pt;
+    transition: all 0.3s;
+}
+nav ul li a:hover {
+    color: #ffffff;
+}
+.site-name {
+    font-size: 72pt;
+    color: #ffffff;
+    padding: 50px 0;
+}
+.home-mid {
+    padding: 25px 0;
+}
+main, aside {
+    display: inline-block;
+    vertical-align: top;
+    width: 70%;
+    min-height: 500px;
+}
+.post h2 {
+    color: #252525;
+}
+.post-summery {
+    padding: 15px 0;
+}
+.btn {
+    color: #fff;
+    border-radius: 3px;
+    padding: 3px 8px;
+    background: transparent;
+    background-color: transparent;
+    background-image: none;;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+}
+.more-btn, .fy-submit {
+    margin: 15px 0;
+    background: rgb(40,171,137);
+    background: linear-gradient(317deg, rgba(40,171,137,1) 0%, rgba(16,154,102,1) 27%, rgba(0,97,60,1) 69%);
+    border-bottom: 0.25rem solid #05744a;
+    z-index: 1;
+}
+.more-btn:after, .fy-submit:after {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    border-radius: 5px;
+    background: rgb(40,171,137);
+    background: linear-gradient(59deg, rgba(40,171,137,1) 0%, rgba(16,154,102,1) 27%, rgba(0,97,60,1) 69%);
+    box-shadow:
+            -7px -7px 20px 0px #fff9,
+            -4px -4px 5px 0px #fff9,
+            7px 7px 20px 0px #0002,
+            4px 4px 5px 0px #0001;
+    transition: all 0.3s ease;
+}
+.more-btn:hover, .fy-submit:hover {
+    color: #fff;
+}
+.more-btn:hover:after, .fy-submit:hover:after {
+    top: 0;
+    height: 100%;
+}
+.more-btn:active, .fy-submit:active {
+    top: 2px;
+}
+aside {
+    width: 25%;
+}
+.comment-widget {
+    padding: 10px 0;
+}
+.comment-widget ul li {
+    padding: 8px 15px;
+}
+.comment-widget ul li a {
+    margin-bottom: 5px;
+    display: block;
+}
+.comment-widget ul li:nth-child(2n+1) {
+    background-color: #f1f1f1;
+}
+.fy-comment-form input, .press-comment input {
+    display: block;
+    width: 50%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px dashed #cccccc;
+    border-radius: 5px;
+}
+.fy-comment-form textarea, .press-comment textarea {
+    display: block;
+    width: 70%;
+    min-height: 150px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px dashed #cccccc;
+    border-radius: 5px;
+}
+.fy-comment-form button, .press-comment button {
+    border: none;
+    border-bottom: 0.25rem solid #05744a;
+    padding: 5px 10px;
+    font-size: 18px;
+    cursor: pointer;
+}
+footer {
+    padding: 15px 0;
+    background-color: #f1f1f1;
+    color: #777;
+    border-top: 0.25rem solid #ccc;
+}
+
+/* responsive */
+@media only screen and (max-width: 800px) {
+    header {
+        min-height: 328px;
+        padding: 15px;
+    }
+    .site-name {
+        font-size: 26pt;
+    }
+    main, aside {
+        display: block;
+        width: 90% !important;
+        min-height: 0;
+        padding: 0;
+        margin: 0 auto;
+    }
+    .copy-right {
+        padding: 0 5px;
+    }
+}

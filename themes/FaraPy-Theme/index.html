@@ -1,0 +1,17 @@
+{% extends 'FaraPy-Theme/base.html' %} {% load thumbnail %} {% load static %}
+{% block title %}Main Page{% endblock title %}
+{% block content %}
+            <main class="posts">
+            {% for p in hotnewss %}
+                <div class="post">
+                    <h2>{{p.title}}</h2>
+                    <div class="post-summery">
+                        <p>
+                           {{p.demo}}
+                        </p>
+                        <a class="btn more-btn" href="/post/{{ p.id }}">Read More</a>
+                    </div>
+                </div>
+             {% endfor %}
+            </main>
+{% endblock %}

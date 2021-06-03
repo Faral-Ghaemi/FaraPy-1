@@ -1,0 +1,169 @@
+
+{% extends 'news/base.html' %} {% load thumbnail %} {% load static %}
+{% block title %}صفحه اصلی{% endblock title %}
+{% block content %}
+<style media="screen">
+  .pagination {
+    margin-top: 10px;
+    text-align: center;
+  }
+  .pagination a {
+    background-color: #d70015;
+    color: #f5f5f5;
+    text-align: center;
+    padding: 3px 5px;
+    border-radius: 3px;
+    transition: all 0.3s;
+  }
+  .pagination a:hover {
+    color: #fff;
+    background-color: #a50413;
+  }
+
+</style>
+        <div class="wrap padding-10 over">
+            <div class="news-holder cf">
+                <ul class="news-headlines">
+                  {% for p in sartitr %}
+                  {% if forloop.counter  == 1%}
+                    <li class="selected">{{p.title}}</li>
+                  {% else %}
+                  <li>{{p.title}}</li>
+                  {% endif %}
+                  {% endfor %}
+                </ul>
+                <div class="news-preview">
+                    {% for p in sartitr %}
+                    <div class="news-content top-content">
+                      {% thumbnail p.image "230x150" crop="center" as im %}
+                        <img src="{{ im.url }}"  >
+                        {% endthumbnail %}
+                        <p><a href="/post/{{ p.id }}">{{ p.title }}</a></p>
+
+                        <p>{{p.demo|slice:":150"}}</p>
+                    </div>
+                    {% endfor %}
+
+                </div>
+                <div class="boshra-poster right">
+                    <a href="#"><img src="{% static 'news/img/mosabeghe.png' %}"></a>
+                </div>
+            </div>
+            <div class="titre-rooz right relative">
+              <section id="titr-slider">
+                  <div class="owl-thumbs" data-slider-id="1">
+                    {% for x in sliders %}c
+                      <button class="owl-thumb-item">{% thumbnail x.image "74x48" crop="center" as im %}
+                        <img src="{{ im.url }}"  >
+                        {% endthumbnail %}</button>
+                    {% endfor %}
+
+                  </div>
+                  <div class="owl-carousel" data-slider-id="1">
+                    {% for x in sliders %}
+                      <div class="titr-slide">
+                          {% thumbnail x.image "560x485" crop="center" as im %}
+                            <img src="{{ im.url }}"  >
+                            {% endthumbnail %}
+                          <h2>{{x.name}}</h2>
+                      </div>
+                      {% endfor %}
+
+                  </div>
+              </section>
+            </div>
+            <div class="first-ads left">
+              {% if ads.count == 0 %}
+                <a href="#"><img src="{% static 'news/img/adsside.jpg' %}"> </a>
+                <a href="#"><img src="{% static 'news/img/adsside.jpg' %}"> </a>
+              {% elif ads.count == 1 %}
+              {% for a in ads %}
+              <a href="{{a.url}}"><img src="{{a.image.url}}"> </a>
+              {% endfor %}
+              <a href="#"><img src="{% static 'news/img/adsside.jpg' %}"> </a>
+              {% elif ads.count == 2%}
+              {% for a in ads %}
+              <a href="{{a.url}}"><img src="{{a.image.url}}"> </a>
+              {% endfor %}
+              {% endif%}
+            </div>
+        </div>
+        <div class="wrap padding-10 over">
+            <div class="latest-news right">
+                <h3><span>آخرین اخبار </span></h3>
+                <ul>
+                  {% for p in hotnewss %}
+                  <li>
+                      <a href="/post/{{ p.id }}">
+                          <div class="latest-thumb right">{% thumbnail p.image "220x143" crop="center" as im %}
+                            <img src="{{ im.url }}"  >
+                            {% endthumbnail %}</div>
+                          <div class="latest-item-content right">
+                              <h3>{{p.title}}</h3>
+                              <p>{{p.demo}}</p>
+                              <div class="latest-date"><i class="bsh-calendar"></i> {{p.created_date}}</div>
+                          </div>
+                      </a>
+                  </li>
+                    {% endfor %}
+
+
+                </ul>
+
+
+
+                <div class="pagination">
+    <span class="step-links">
+        {% if hotnewss.has_previous %}
+            <a href="?page=1">« صفحه نخست</a>
+            <a href="?page={{ hotnewss.previous_page_number }}">قبلی</a>
+        {% endif %}
+
+        <span class="current">
+            صفحه {{ hotnewss.number }} از {{ hotnewss.paginator.num_pages }}
+        </span>
+
+        {% if hotnewss.has_next %}
+            <a href="?page={{ hotnewss.next_page_number }}">بعدی</a>
+            <a href="?page={{ hotnewss.paginator.num_pages }}">آخر &raquo;</a>
+        {% endif %}
+    </span>
+              </div>
+
+
+
+            </div>
+            <div class="tasviri left">
+                <h3><span>آخرین اخبار و گزارشات تصویری</span></h3>
+                <div class="tasviri-piks">
+                  {% for p in multi %}
+                  <a href="#">
+                  {% thumbnail p.image "250x150" crop="center" as im %}
+                    <img src="{{ im.url }}"  >
+                    {% endthumbnail %}
+                        <div class="tasviri-piks-cover">
+                            <h3>{{p.title}}</h3>
+                        </div>
+
+                      </a>
+                    {% endfor %}
+
+                </div>
+                <h3><span>ویدئوهای منتخب</span></h3>
+                <div class="boshra-video-tabs">
+                    <div class="tab">
+                        <button class="tablinks" onclick="openVideo(event, 'hafte')" id="defaultOpen">ویدئوی منتخب</button>
+                    </div>
+
+                    <div id="hafte" class="tabcontent">
+                      <video controls>
+                       <source src="{{video.video.url}}" type="video/mp4">
+                      مرورگر شما نمایش ویدئو را پشتیبانی نمیکند، لطفا از یک مرورگر بروزتر استفاده نمایید
+                      </video>
+                    </div>
+                    <script>
+                        document.getElementById("defaultOpen").click();
+                    </script>
+                </div>
+            </div>
+        </div>{% endblock content %}

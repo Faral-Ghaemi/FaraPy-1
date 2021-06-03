@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<!-- Powered by FaraPy. https://farapy.ir/  -->
+
+<html lang="fa">{% load static %}
+{% load thumbnail %}
+<head>
+  <title>{{setting.persian_title}} - {% block title %}{% endblock %}</title>
+
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'news/style.css' %}">
+    <link rel="stylesheet" href="{% static 'news/css/fonts.css' %}">
+    <link rel="stylesheet" href="{% static 'news/css/icons.css' %}">
+    <link rel="stylesheet" href="{% static 'news/css/owl.carousel.min.css' %}">
+
+<script src="{% static 'news/js/jquery-3.4.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'news/js/boshra.ticker.js' %}"></script>
+    <script type="text/javascript" src="{% static 'news/js/persianumber.js' %}"></script>
+    <script type="text/javascript" src="{% static 'news/js/firstslider.js' %}"></script>
+    <script type="text/javascript" src="{% static 'news/js/boshra.tabs.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'news/js/sticky.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'news/js/owl.carousel.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'news/js/owl.carousel2.thumbs.js' %}"></script>
+    <script type="text/javascript" src="{% static 'news/js/settings.js' %}"></script>
+    <script type="text/javascript" src="{% static 'news/js/font-size.js' %}"></script>
+    <script type="text/javascript" src="{% static 'news/js/print.js' %}"></script>
+    <script type="text/javascript" src="{% static 'news/js/to-top.js' %}"></script>
+
+    <div class="top-bar">
+        <div class="wrap">
+            <nav class="top-menu right">
+                <ul>
+                  {% for x in smenu.submenu_set.all %}
+                  {% if x.ismom == 1 %}
+                    <li><a href="{% if x.status == 0 %}{{x.subcat.furl}}{% elif x.status == 2 %} {{x.subpage.furl}}{% else %} {{x.suburl.furl}}{% endif %}" title="{{x.title}}">{{x.title}}</a></li>
+                  {% endif %}
+                    {% endfor %}
+                </ul>
+            </nav>
+            <nav class="social-menu left">
+                <ul>
+                    <li><a href="#"><i class="bsh-home"></i></a></li>
+                    <li><a href="#"><i class="bsh-instagram"></i></a></li>
+                    <li><a href="#"><i class="bsh-telegram"></i></a></li>
+                    <li><a href="#"><i class="bsh-aparat"></i></a></li>
+                    <li><a href="#"><i class="bsh-twitter"></i></a></li>
+                    <li><a href="#"><i class="bsh-rss"></i></a></li>
+                    <li><a href="#"><i class="bsh-search"></i></a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="middle-bar">
+        <div class="wrap">
+            <a class="logo right" href="#" title="{{setting.persian_title}}">
+                <img src="{{logo.url}}">
+                <h2>{{setting.persian_title}}</h2>
+            </a>
+            <div class="wheather left">
+                <img src="{% static 'news/img/sun.png' %}">
+                <span>{{city}} , °{{temp}} </span>
+            </div>
+        </div>
+    </div>
+    <div class="boshra-sticky">
+        <div class="main-bar">
+            <div class="wrap relative">
+                <nav class="main-menu">
+                    <ul>
+                        <li><a href="/">خانه</a></li>
+                         {% for c in mmenu.submenu_set.all %}{% if c.ismom == 1 %}
+                        <li><a href="{% if c.status == 0 %}{{c.subcat.furl}}{% elif c.status == 2 %} {{c.subpage.furl}}{% else %} {{c.suburl.furl}}{% endif %}">{{ c.title }}</a>
+                          {% endif %}
+                        {% if c.menuu.all.count > 0  %}<ul>
+                        {% for x in c.menuu.all %}
+                        <li><a href="{% if x.status == 0 %}{{x.subcat.furl}}{% elif x.status == 2 %} {{x.subpage.furl}}{% else %} {{x.suburl.furl}}{% endif %}">{{x.title }}</a>
+                        {% endfor %}
+                      </ul>
+                        {% else %}</li>
+                        {%endif%}
+                        {% endfor %}
+
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <div class="boshra-ticker">
+            <div class="wrap relative over">
+                <div class="right hot"><i class="bsh-fire"></i> داغترین اخبار:</div>
+                <ul class="typing">
+                  {% for s in sartitr %}
+                    <li><a href="/post/{{s.id}}/">{{s.title}}</a></li>
+                    {% endfor %}
+                    </ul>
+            </div>
+        </div>
+    </div>
+</head>
+<body>
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <div class="footer-bar">
+            <div class="wrap over">
+                <div class="footer-box">
+                    <h4><span>لینک دوستان</span></h4>
+                    <ul>
+                      {% for l in links %}
+                        <li><a href="{{l.url}}">{{l.title}}</a> </li>
+                      {% endfor %}
+
+                    </ul>
+                </div>
+                <div class="footer-box">
+                    <h4><span>لینک همکاران</span></h4>
+                      {% for y in hamkar %}
+                    <ul>
+
+                        <li><a href="#">{{y.name}}</a> </li>
+
+                    </ul>
+                    {%endfor%}
+                </div>
+                <div class="footer-box">
+                    <h4><span>بشری در شبکه های اجتماعی</span></h4>
+                    <ul>
+                        <li><a href="{{setting.instagram}}">اینستاگرام</a> </li>
+                        <li><a href="{{setting.telgram}}">تلگرام</a> </li>
+                        <li><a href="{{setting.facebook}}">فیس بوک</a> </li>
+                        <li><a href="{{setting.twitter}}">توییتر</a> </li>
+                        <li><a href="{{setting.linkedin}}">لینکدین</a> </li>
+                    </ul>
+                </div>
+                <div class="footer-box">
+                    <h4><span>لینک های سریع</span></h4>
+                    <ul>
+                      {% for x in smenu.submenu_set.all %}
+                      {% if x.ismom == 1 %}
+                        <li><a href="{% if x.status == 0 %}{{x.subcat.furl}}{% elif x.status == 2 %} {{x.subpage.furl}}{% else %} {{x.suburl.furl}}{% endif %}">{{x.title}}</a> </li>
+                        {% endif %}
+                          {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="boshra-cpr">
+            <div class="wrap">
+               کلیه حقوق مادی و معنوی این وبسایت متعلق به {{setting.persian_title}} می باشد و هر گونه کپی برداری از مطالب وبسایت با ذکر منبع بلا مانع است<span>طراحی و برنامه نویسی توسط تیم IT در بشری</span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

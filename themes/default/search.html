@@ -1,0 +1,40 @@
+{% extends 'default/base.html' %} {% load thumbnail %} {% load static %}
+{% block title %}{{p.title}}{% endblock title %}
+{% block bread-crumb %}
+<a href="/"><i class="bsh-home"></i> </a> » <a>{{s}}</a>
+
+{% endblock %}
+{% block content %}
+                <div class="cat-box left">
+                    <div class="post">
+                        <h1>نتیجه جستجوی برای: {{ s }}</h1>
+                        <ul class="cat-posts">
+                          {% for p in c %}
+                            <li>
+                                <a href="#" title="عنوان">
+                                    <div class="cat-post-pik">{% thumbnail p.image "210x137" crop="center" as im %}<img src="{{ im.url }}" >{% endthumbnail %}</div>
+                                    <h2>{{p.title}}</h2>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <div class="pagination">
+                          <span class="step-links">
+                              {% if c.has_previous %}
+                                  <a href="?page=1">« صفحه نخست</a>
+                                  <a href="?page={{ c.previous_page_number }}">قبلی</a>
+                              {% endif %}
+
+                              <span class="current">
+                                  صفحه {{ c.number }} از {{ c.paginator.num_pages }}
+                              </span>
+
+                              {% if c.has_next %}
+                                  <a href="?page={{ c.next_page_number }}">بعدی</a>
+                                  <a href="?page={{ c.paginator.num_pages }}">آخر &raquo;</a>
+                              {% endif %}
+                          </span>
+                      </div>
+                    </div>
+                </div>
+                {% endblock %}

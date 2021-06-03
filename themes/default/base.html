@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<!-- Powered by FaraPy. https://farapy.ir/  -->
+{% load static %}{% load thumbnail %}
+<html lang="fa">
+<head>
+  <title>{{setting.persian_title}} - {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{% static 'default/css/fonts.css' %}">
+    <link rel="stylesheet" href="{% static 'default/css/icons.css' %}">
+    <link rel="stylesheet" href="{% static 'default/css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'default/css/jquery.fancybox.min.css' %}">
+    <script src="{% static 'default/js/jquery-3.5.1.min.js' %}"></script>
+    <script src="{% static 'default/js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'default/js/settings.js' %}"></script>
+    <script src="{% static 'default/js/boshra.ticker.js' %}"></script>
+    <script src="{% static 'default/js/boshra.tabs.js' %}"></script>
+    <script src="{% static 'default/js/jquery.fancybox.min.js' %}"></script>
+    <script src="{% static 'default/js/jquery.vTicker.js' %}"></script>
+    <script src="{% static 'default/js/persianumber.js' %}"></script>
+    {% block js %}
+    {% endblock %}
+</head>
+<body>
+
+    <link rel="stylesheet" href="{% static 'default/css/post.css' %}">
+    <div class="main-container over">
+        <div class="header-corner over">
+            <img class="logo right" src="{{logo.url}}">
+            <div class="social-menu left">
+                <ul>
+                  <li><a href="#"><i class="bsh-home"></i></a></li>
+                  <li><a href="{{setting.instagram}}"><i class="bsh-instagram"></i></a></li>
+                  <li><a href="{{setting.telgram}}"><i class="bsh-telegram"></i></a></li>
+                  <li><a href="#"><i class="bsh-aparat"></i></a></li>
+                  <li><a href="{{setting.twitter}}"><i class="bsh-twitter"></i></a></li>
+                  <li><a href="#"><i class="bsh-rss"></i></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="nav-bar right">
+          <ul>
+            {% for c in mmenu.submenu_set.all %}{% if c.ismom == 1 %}
+           <li><a href="{% if c.status == 0 %}{{c.subcat.furl}}{% elif c.status == 2 %} {{c.subpage.furl}}{% else %} {{c.suburl.furl}}{% endif %}">{{ c.title }}</a>
+             {% endif %}
+           {% if c.menuu.all.count > 0  %}<ul>
+           {% for x in c.menuu.all %}
+           <li><a href="{% if x.status == 0 %}{{x.subcat.furl}}{% elif x.status == 2 %} {{x.subpage.furl}}{% else %} {{x.suburl.furl}}{% endif %}">{{x.title }}</a>
+           {% endfor %}
+         </ul>
+           {% else %}</li>
+           {%endif%}
+           {% endfor %}
+          </ul>
+        </div>
+        <div class="search-box left">
+            <form method="post" action="/search/">{% csrf_token %}
+                <input type="search" name="s" id="s">
+                <button class="bsh-search" type="submit"></button>
+            </form>
+        </div>
+        <div class="clear"></div>
+        <div class="box over">
+            <div class="clear"></div>
+            <div class="daily-word">
+                <div class="daily-word-items">
+                  <ul class="typing">
+                    {% for s in sartitr %}
+                      <li><a href="/post/{{s.id}}/">{{s.title}}</a></li>
+                      {% endfor %}
+                  </ul>
+                </div>
+            </div>
+            <div class="bread-crumb">
+                <div class="bread-crumb-items">
+                  {% block bread-crumb %}
+                    <a href="#"><i class="bsh-home"></i> </a> » <a href="#">اخبار</a> » <a href="#">عنوان خبر</a>
+                    {% endblock %}
+                </div>
+            </div>
+            <main class="news-part over">
+                <div class="right-side right">
+                  <h2>تصویر منتخب</h2>
+                  {% for p in multi %}
+                  {% if forloop.counter == 1 %}
+                  <a class="fancybox" title="title" data-fancybox="gallery-1" rel="gorup-1" href="{{p.image.url}}">{% thumbnail p.image "310x300" crop="center" as im %}
+                  <img src="{{ im.url }}"  >
+                  {% endthumbnail %} </a>
+                  {% else %}
+                  <a class="fancybox" title="title" data-fancybox="gallery-1" rel="gorup-1" href="{{p.image.url}}"></a>
+                  {% endif %}
+                  {% endfor %}
+                </div>
+                {% block content %}{% endblock %}
+                <div class="right-side notif-side right">
+                  <h2>محبوب ترین مطالب</h2>
+                  <ul class="newsticker">
+                    {% for x in mahbob %}
+                      <li>
+                          <a href="/post/{{x.id}}">
+                              <div class="vtivker-pik right">{% thumbnail x.image "96x62" crop="center" as im %}
+                              <img src="{{ im.url }}"  >
+                              {% endthumbnail %}</div>
+                              <div class="vticker-items">
+                                  <h3>{{x.title}}</h3>
+                                  <span>{{x.created_date}}</span>
+                              </div>
+                          </a>
+                      </li>
+                      {% endfor %}
+                  </ul>
+                  <div class="vtivker-btns">
+                      <span id="prev-button">قبل</span>
+                      <span id="next-button">بعد</span>
+                      <span id="stop-button">توقف</span>
+                      <span id="start-button">ادامه</span>
+                  </div>
+                  <script>
+                      $('.newsticker').newsTicker({
+                          row_height: 72,
+                          max_rows: 6,
+                          speed: 800,
+                          prevButton:  $('#prev-button'),
+                          nextButton:  $('#next-button'),
+                          stopButton:  $('#stop-button'),
+                          startButton: $('#start-button')
+                      });
+                  </script>
+                </div>
+                <div class="clear"></div>
+                <div class="before-footer">
+                    <div class="footer-box">
+                        <h3>پیوندهای مرتبط</h3>
+                        <div class="footer-box-content imp-links">
+                          <ul>
+                            {% for a in ads %}
+                              <li>
+                                  <a href="{{a.url}}">{% thumbnail a.image "345x70" crop="center" as im %}
+                                  <img src="{{ im.url }}"  >
+                                  {% endthumbnail %} </a>
+                              </li>
+                              {% endfor %}
+
+                          </ul>
+                        </div>
+                    </div>
+                    <div class="footer-box">
+                        <h3>پیوند های سریع</h3>
+                        <div class="footer-box-content rel-link">
+                          <ul>
+                            {% for x in smenu.submenu_set.all %}
+                            {% if x.ismom == 1 %}
+                              <li><a href="{% if x.status == 0 %}{{x.subcat.furl}}{% elif x.status == 2 %} {{x.subpage.furl}}{% else %} {{x.suburl.furl}}{% endif %}" title="{{x.title}}">{{x.title}}</a></li>
+                            {% endif %}
+                              {% endfor %}
+                          </ul>
+                        </div>
+                    </div>
+                    <div class="footer-box">
+                        <h3>ارتباط با ما</h3>
+                        <div class="footer-box-content fast-form">
+                            <form action="/getmem/" method="post">
+                              {% csrf_token %}
+                                <input type="text" name="full_name" placeholder="نام و نام خانوادگی">
+                                <input type="text" name="phone" placeholder="شماره تماس">
+                                <button type="submit">ثبت و ارسال</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <footer>
+                    کلیه حقوق مادی و معنوی این وبسایت متعلق به پایگاه اطلاع رسانی عباس رجائی میباشد و هرگونه کپی برداری با ذکر منبع بلامانع است.
+                </footer>
+            </main>
+        </div>
+    </div>
+</body>
+
+</html>

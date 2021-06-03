@@ -1,0 +1,12 @@
+django==2.2.7
+pillow
+django_jalali
+jdatetime
+django-ckeditor
+sorl-thumbnail
+kavenegar
+django-widget-tweaks
+simplejson
+djangorestframework
+django-rest-auth
+django-allauth

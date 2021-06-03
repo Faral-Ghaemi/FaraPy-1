@@ -1,0 +1,86 @@
+{% extends 'default/base.html' %} {% load thumbnail %} {% load static %}
+
+{% block title %}{{p.title}}{% endblock title %}
+
+{% block bread-crumb %}
+
+<a href="/"><i class="bsh-home"></i> </a> » <a href="/category/{{p.category.id}}">{{p.category}}</a> » <a href="/post/{{p.id}}">{{p.title}}</a>
+
+
+
+{% endblock %}
+
+{% block content %}
+
+                <div class="cat-box left">
+
+                    <div class="post">
+
+                      <div class="post-pik">
+
+                        {% thumbnail p.image "802x339" crop="center" as im %}<img src="{{ im.url }}" >{% endthumbnail %}
+
+                      </div>
+
+                        <h1>پوسته دلخواه دسته</h1>
+
+                        <ul class="cat-posts">
+
+                          {% for post in hotnewss %}
+
+                            <li>
+
+                                <a href="/post/{{post.id}}" title="{{post.title}}">
+
+                                    <div class="cat-post-pik">{% thumbnail post.image "210x137" crop="center" as im %}<img src="{{ im.url }}" >{% endthumbnail %}</div>
+
+                                    <h2>{{post.title}}</h2>
+
+                                </a>
+
+                            </li>
+
+                            {% endfor %}
+
+                        </ul>
+
+                        <div class="pagination">
+
+                          <span class="step-links">
+
+                              {% if hotnewss.has_previous %}
+
+                                  <a href="?page=1">« صفحه نخست</a>
+
+                                  <a href="?page={{ hotnewss.previous_page_number }}">قبلی</a>
+
+                              {% endif %}
+
+
+
+                              <span class="current">
+
+                                  صفحه {{ hotnewss.number }} از {{ hotnewss.paginator.num_pages }}
+
+                              </span>
+
+
+
+                              {% if hotnewss.has_next %}
+
+                                  <a href="?page={{ hotnewss.next_page_number }}">بعدی</a>
+
+                                  <a href="?page={{ hotnewss.paginator.num_pages }}">آخر &raquo;</a>
+
+                              {% endif %}
+
+                          </span>
+
+                      </div>
+
+                    </div>
+
+                </div>
+
+                {% endblock %}
+

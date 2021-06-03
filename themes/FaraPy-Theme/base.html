@@ -1,0 +1,55 @@
+{% load thumbnail %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{{setting.title}}{% block title %}{% endblock %}</title>
+        <link rel="stylesheet" href="/theme/FaraPy-Theme/style.css">
+        <header>
+            <nav>
+          <ul>
+            {% for c in mmenu.submenu_set.all %}{% if c.ismom == 1 %}
+           <li>
+                <a href="{% if c.status == 0 %}{{c.subcat.furl}}{% elif c.status == 2 %} {{c.subpage.furl}}{% else %} {{c.suburl.furl}}{% endif %}">{{ c.title }}</a>
+            {% endif %}{% if c.menuu.all.count > 0  %}
+                <ul>
+                {% for x in c.menuu.all %}
+                    <li><a href="{% if x.status == 0 %}{{x.subcat.furl}}{% elif x.status == 2 %} {{x.subpage.furl}}{% else %} {{x.suburl.furl}}{% endif %}">{{x.title }}</a>
+                {% endfor %}
+                </ul>
+           {% else %}
+                </li>
+           {%endif%}{% endfor %}
+          </ul>
+            </nav>
+            <div class="wrap site-name">
+                <h1>{% block banner %}FaraPy{% endblock %}</h1>
+            </div>
+        </header>
+    </head>
+    <body>
+        <div class="wrap home-mid">
+            {% block content %}{% endblock %}
+            <aside>
+                <h3>Recent Comments</h3>
+                <div class="comment-widget">
+                {% if comments.count > 0 %}
+                    <ul>
+                    {% for x in comments|slice:":3" %}
+                        <li>
+                            <a href="/post/{{x.post.id}}/">{{x.post.title}}</a>
+                            <p>{{x.date}}</p>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                    {% else %}
+                        <p>There is no comment to show</p>
+                    {% endif %}
+                </div>
+            </aside>
+        </div>
+        <footer>
+            <div class="copy-right">© 2020 FaraPy - Powered by Faral </div>
+        </footer>
+    </body>
+</html>
